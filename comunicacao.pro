@@ -18,6 +18,7 @@ LIBS *= -lprotobuf
 system(cd protobufs/proto && protoc --cpp_out=../ *.proto && cd ../..)
 
 SOURCES += \
+        actions/actions.cpp \
         actuator/actuator.cpp \
         main.cpp \
         protobufs/grSim_Commands.pb.cc \
@@ -38,6 +39,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    actions/actions.h \
     actuator/actuator.h \
     protobufs/grSim_Commands.pb.h \
     protobufs/grSim_Packet.pb.h \

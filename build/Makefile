@@ -52,7 +52,8 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../actuator/actuator.cpp \
+SOURCES       = ../actions/actions.cpp \
+		../actuator/actuator.cpp \
 		../main.cpp \
 		../protobufs/grSim_Commands.pb.cc \
 		../protobufs/grSim_Packet.pb.cc \
@@ -65,7 +66,8 @@ SOURCES       = ../actuator/actuator.cpp \
 		../protobufs/ssl_vision_wrapper.pb.cc \
 		../protobufs/ssl_vision_wrapper_tracked.pb.cc \
 		../vision/vision.cpp 
-OBJECTS       = actuator.o \
+OBJECTS       = actions.o \
+		actuator.o \
 		main.o \
 		grSim_Commands.pb.o \
 		grSim_Packet.pb.o \
@@ -155,7 +157,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../../comunicacao.pro ../actuator/actuator.h \
+		../../comunicacao.pro ../actions/actions.h \
+		../actuator/actuator.h \
 		../protobufs/grSim_Commands.pb.h \
 		../protobufs/grSim_Packet.pb.h \
 		../protobufs/grSim_Replacement.pb.h \
@@ -166,7 +169,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		../protobufs/ssl_vision_geometry.pb.h \
 		../protobufs/ssl_vision_wrapper.pb.h \
 		../protobufs/ssl_vision_wrapper_tracked.pb.h \
-		../vision/vision.h ../actuator/actuator.cpp \
+		../vision/vision.h ../actions/actions.cpp \
+		../actuator/actuator.cpp \
 		../main.cpp \
 		../protobufs/grSim_Commands.pb.cc \
 		../protobufs/grSim_Packet.pb.cc \
@@ -363,8 +367,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../actuator/actuator.h ../protobufs/grSim_Commands.pb.h ../protobufs/grSim_Packet.pb.h ../protobufs/grSim_Replacement.pb.h ../protobufs/ssl_gc_common.pb.h ../protobufs/ssl_gc_geometry.pb.h ../protobufs/ssl_vision_detection.pb.h ../protobufs/ssl_vision_detection_tracked.pb.h ../protobufs/ssl_vision_geometry.pb.h ../protobufs/ssl_vision_wrapper.pb.h ../protobufs/ssl_vision_wrapper_tracked.pb.h ../vision/vision.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../actuator/actuator.cpp ../main.cpp ../protobufs/grSim_Commands.pb.cc ../protobufs/grSim_Packet.pb.cc ../protobufs/grSim_Replacement.pb.cc ../protobufs/ssl_gc_common.pb.cc ../protobufs/ssl_gc_geometry.pb.cc ../protobufs/ssl_vision_detection.pb.cc ../protobufs/ssl_vision_detection_tracked.pb.cc ../protobufs/ssl_vision_geometry.pb.cc ../protobufs/ssl_vision_wrapper.pb.cc ../protobufs/ssl_vision_wrapper_tracked.pb.cc ../vision/vision.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../actions/actions.h ../actuator/actuator.h ../protobufs/grSim_Commands.pb.h ../protobufs/grSim_Packet.pb.h ../protobufs/grSim_Replacement.pb.h ../protobufs/ssl_gc_common.pb.h ../protobufs/ssl_gc_geometry.pb.h ../protobufs/ssl_vision_detection.pb.h ../protobufs/ssl_vision_detection_tracked.pb.h ../protobufs/ssl_vision_geometry.pb.h ../protobufs/ssl_vision_wrapper.pb.h ../protobufs/ssl_vision_wrapper_tracked.pb.h ../vision/vision.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../actions/actions.cpp ../actuator/actuator.cpp ../main.cpp ../protobufs/grSim_Commands.pb.cc ../protobufs/grSim_Packet.pb.cc ../protobufs/grSim_Replacement.pb.cc ../protobufs/ssl_gc_common.pb.cc ../protobufs/ssl_gc_geometry.pb.cc ../protobufs/ssl_vision_detection.pb.cc ../protobufs/ssl_vision_detection_tracked.pb.cc ../protobufs/ssl_vision_geometry.pb.cc ../protobufs/ssl_vision_wrapper.pb.cc ../protobufs/ssl_vision_wrapper_tracked.pb.cc ../vision/vision.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -411,6 +415,17 @@ compiler_clean: compiler_moc_predefs_clean
 
 ####### Compile
 
+actions.o: ../actions/actions.cpp ../actions/actions.h \
+		../vision/vision.h \
+		../protobufs/ssl_vision_wrapper.pb.h \
+		../protobufs/ssl_vision_detection.pb.h \
+		../protobufs/ssl_vision_geometry.pb.h \
+		../actuator/actuator.h \
+		../protobufs/grSim_Packet.pb.h \
+		../protobufs/grSim_Commands.pb.h \
+		../protobufs/grSim_Replacement.pb.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o actions.o ../actions/actions.cpp
+
 actuator.o: ../actuator/actuator.cpp ../actuator/actuator.h \
 		../protobufs/grSim_Packet.pb.h \
 		../protobufs/grSim_Commands.pb.h \
@@ -424,7 +439,8 @@ main.o: ../main.cpp ../vision/vision.h \
 		../actuator/actuator.h \
 		../protobufs/grSim_Packet.pb.h \
 		../protobufs/grSim_Commands.pb.h \
-		../protobufs/grSim_Replacement.pb.h
+		../protobufs/grSim_Replacement.pb.h \
+		../actions/actions.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
 grSim_Commands.pb.o: ../protobufs/grSim_Commands.pb.cc ../protobufs/grSim_Commands.pb.h
